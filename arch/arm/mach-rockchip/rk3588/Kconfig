@@ -408,6 +408,12 @@ config TARGET_TOYBRICK_RK3588
 	  1x HDMI Output, 1x HDMI Input
 	  2x Ethernet Port
 
+config TARGET_IVKOVIC_MIURA_RK3588S
+	bool "Ivkovic-Miura RK3588S Board"
+	# select CHROMIUM_VBOOT if TYPEC_STREAMS
+	help
+	  Ivkovic-Miura RK3588S Board is a Rockchip RK3588S based bord.
+
 
 config ROCKCHIP_BOOT_MODE_REG
 	default 0xfd588080
@@ -439,6 +445,7 @@ source "board/rockchip/evb_rk3588/Kconfig"
 source "board/rockchip/toybrick_rk3588/Kconfig"
 source "board/theobroma-systems/jaguar_rk3588/Kconfig"
 source "board/theobroma-systems/tiger_rk3588/Kconfig"
+source "board/ivkovic-miura/ivkovic-miura_rk3588s/Kconfig"
 
 config SYS_CONFIG_NAME
 	default "rk3588_common"

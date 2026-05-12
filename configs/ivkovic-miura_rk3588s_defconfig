@@ -1,0 +1,50 @@
+# Core Architecture & SoC Targets
+CONFIG_ARM=y
+CONFIG_SKIP_LOWLEVEL_INIT=y
+CONFIG_COUNTER_FREQUENCY=24000000
+CONFIG_ARCH_ROCKCHIP=y
+CONFIG_TEXT_BASE=0x00200000
+CONFIG_SYS_MALLOC_F_LEN=0x80000
+CONFIG_HAS_CUSTOM_SYS_INIT_SP_ADDR=y
+CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x3f0000
+CONFIG_SF_DEFAULT_SPEED=24000000
+CONFIG_TARGET_IMX_CUSTOM_RK3588S=y
+
+# Console Lockdown and Boot Timings
+CONFIG_BOOTDELAY=0
+CONFIG_SILENT_CONSOLE=y
+CONFIG_SYS_DEVICE_NULLDEV=y
+CONFIG_SILENT_CONSOLE_UPDATE_ON_SET=y
+CONFIG_SILENT_CONSOLE_UPDATE_ON_RELOC=y
+
+# Storage and Filesystem Architecture
+CONFIG_CMD_MMC=y
+CONFIG_CMD_GPT=y
+CONFIG_CMD_FAT=y
+CONFIG_CMD_FS_GENERIC=y
+CONFIG_DOS_PARTITION=y
+CONFIG_EFI_PARTITION=y
+
+# Force Stage 2 (SPL) to mount Partition 2 or 3 dynamically 
+CONFIG_SPL_RAW_IMAGE_SUPPORT=n
+CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR=n
+CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION=y
+CONFIG_SPL_GPT_SUPPORT=y
+CONFIG_SPL_FS_FAT=y
+
+# Structural Enforcement (Enables modern FIT container verification)
+CONFIG_SPL_LOAD_FIT=y
+
+# The Base String file target parsed natively by Stage 2
+CONFIG_SPL_FS_LOAD_PAYLOAD_NAME="bootloader/u-boot.img" # .itb?
+
+# Enable the Bootcount / Failure Tracking Framework
+CONFIG_BOOTCOUNT_LIMIT=y
+CONFIG_BOOTCOUNT_ENV=y
+
+# Hardcode the Lockdown Command String directly into Stage 3 proper
+CONFIG_USE_BOOTCOMMAND=y
+CONFIG_BOOTCOMMAND="setenv silent 1; setenv stdin nul; setenv stdout serial,vidconsole; setenv stderr serial,vidconsole; setenv bootstopkeyset d4315e90b0cfc95403ada8cb13156451d319e176267b2d1a9e48cfdc37d7c; usb start; if load usb 0:1 ${kernel_addr_r} /EFI/BOOT/RECOVERY.EFI; then bootefi ${kernel_addr_r}; fi; if test \"${bootcount}\" -gt 3; then echo \"CRITICAL: Bootloop detected! Forcing Slot B Register write...\"; mw.l 0xFD58A00C 0xAB0000B2; saveenv; reset; fi; if load mmc 0:2 ${kernel_addr_r} /EFI/BOOT/BOOTAA64.EFI; then bootefi ${kernel_addr_r}; else echo \"Slot A missing/corrupt. Trying Slot B...\"; load mmc 0:3 ${kernel_addr_r} /EFI/BOOT/BOOTAA64.EFI; bootefi ${kernel_addr_r}; fi"
+
+
+

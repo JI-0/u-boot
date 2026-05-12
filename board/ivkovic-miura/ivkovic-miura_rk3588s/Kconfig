@@ -1,0 +1,13 @@
+if TARGET_IVKOVIC_MIURA_RK3588S
+
+config SYS_BOARD
+	default "ivkovic-miura-rk3588s"
+
+config SYS_VENDOR
+	default "ivkovic-miura"
+
+config SYS_CONFIG_NAME
+	default "ivkovic-miura-rk3588s"
+
+endif
+
